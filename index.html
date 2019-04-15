@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>DPS Calc</title>
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css">
+    <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+    <link rel="stylesheet" href="./css/main.css">
+</head>
+<body>
+<div class="full" id="spinner" style="display: flex; position: fixed; height: 100%; width: 100%; background-color: white; z-index: 10; justify-content: center; align-items: center; flex-direction: column ;">
+    <p>The gnomes are fetching the data</p>
+    <br/>
+    <div id="p2" class="mdl-progress mdl-js-progress mdl-progress__indeterminate"></div>
+</div>
+
+<!-- The drawer is always open in large screens. The header is always shown,
+  even in small screens. -->
+<div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+    <header class="mdl-layout__header">
+        <div class="mdl-layout__header-row">
+            <span class="mdl-layout-title">OSRS DPS Calc</span>
+
+            <nav class="mdl-navigation mdl-layout--large-screen-only">
+                <a class="mdl-navigation__link">Export code</a>
+                <p class="mdl-navigation__link"><input class="mdl-textfield__input" type="text" id="export"></p>
+            </nav>
+
+            <div class="mdl-layout-spacer"></div>
+            <div class="mdl-textfield mdl-js-textfield mdl-textfield--expandable mdl-textfield--floating-label mdl-textfield--align-right">
+                <label class="mdl-button mdl-js-button mdl-button--icon" for="import">
+                    <i class="material-icons">autorenew</i>
+                </label>
+                <div class="mdl-textfield__expandable-holder">
+                    <input class="mdl-textfield__input" type="text" id="import" onfocusout="Envil.import();">
+                </div>
+            </div>
+        </div>
+        <div class="mdl-layout__header-row">
+            <!-- Navigation -->
+            <nav class="mdl-navigation" id="pagination">
+
+            </nav>
+        </div>
+    </header>
+    <main class="mdl-layout__content">
+
+        <div class="page-content">
+
+            <div class="content-grid mdl-grid">
+                <div class="mdl-cell mdl-cell--2-col">
+                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                        <select class="mdl-textfield__input" id="sortTypes">
+                        </select>
+                        <label class="mdl-textfield__label" for="sortTypes">Sort by</label>
+                    </div>
+                    <button id="addSort" type="button" class="mdl-chip__action"><i class="material-icons">add</i></button>
+
+                    <ul id="SortContainer">
+                    </ul>
+
+                    <br />
+
+                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                        <select class="mdl-textfield__input" id="filterKey">
+                        </select>
+                        <label class="mdl-textfield__label" for="filterKey">Filter by</label>
+                    </div>
+                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                        <select class="mdl-textfield__input" id="filterTypes">
+                            <option type="==">Equal (==)</option>
+                            <option type="!=">Not equal (!=)</option>
+                            <option type=">">Greater than (>)</option>
+                            <option type=">=">Greater than or equal to (>=)</option>
+                            <option type="<">Less than (<)</option>
+                            <option type="<=">Less than or equal to (<=)</option>
+                        </select>
+                        <label class="mdl-textfield__label" for="filterTypes">Filter operator</label>
+                    </div>
+                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                        <input class="mdl-textfield__input" type="text" id="filterValue">
+                        <label class="mdl-textfield__label" for="filterValue">Filter value</label>
+                    </div>
+
+                    <button id="addFilter" type="button" class="mdl-chip__action"><i class="material-icons">add</i></button>
+                    <ul id="FilterContainer">
+                    </ul>
+                </div>
+
+                <div class="mdl-grid mdl-cell mdl-cell--4-col" id="content">
+
+                </div>
+
+                <div class="mdl-cell mdl-cell--4-col">
+                    <div class="mdl-cell--4-col mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                        <select class="mdl-textfield__input" id="stance">
+                            <option type="accurate">Accurate</option>
+                            <option type="aggressive">Aggressive</option>
+                            <option type="defensive">Defensive</option>
+                            <option type="controlled">Controlled</option>
+                            <option type="rapid">Rapid</option>
+                            <option type="longrange">Long range</option>
+                            <option type="normal">Normal</option>
+                        </select>
+                        <label class="mdl-textfield__label" for="stance">Attack style</label>
+                    </div>
+
+                    <div class="mdl-cell--4-col mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                        <select class="mdl-textfield__input" id="attackMode">
+                            <option type="stabAttack">Stab</option>
+                            <option type="slashAttack">Slash</option>
+                            <option type="crushAttack">Crush</option>
+                            <option type="rangeAttack">Range</option>
+                            <option type="magicAttack">Magic</option>
+                        </select>
+                        <label class="mdl-textfield__label" for="attackMode">Attack mode</label>
+                    </div>
+
+                    <div class="mdl-cell--4-col mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                        <select class="mdl-textfield__input" id="magicSpell">
+                            <option type="air strike" spellbook="standard" speed="5">Air strike</option>
+                            <option type="water strike" spellbook="standard" speed="5">Water strike</option>
+                            <option type="earth strike" spellbook="standard" speed="5">Earth strike</option>
+                            <option type="fire strike" spellbook="standard" speed="5">Fire strike</option>
+
+                            <option type="air bolt" spellbook="standard" speed="5">Air bolt</option>
+                            <option type="water bolt" spellbook="standard" speed="5">Water bolt</option>
+                            <option type="earth bolt" spellbook="standard" speed="5">Earth bolt</option>
+                            <option type="fire bolt" spellbook="standard" speed="5">Fire bolt</option>
+
+                            <option type="air blast" spellbook="standard" speed="5">Air blast</option>
+                            <option type="water blast" spellbook="standard" speed="5">Water blast</option>
+                            <option type="earth blast" spellbook="standard" speed="5">Earth blast</option>
+                            <option type="fire blast" spellbook="standard" speed="5">Fire blast</option>
+
+                            <option type="air wave" spellbook="standard" speed="5">Air wave</option>
+                            <option type="water wave" spellbook="standard" speed="5">Water wave</option>
+                            <option type="earth wave" spellbook="standard" speed="5">Earth wave</option>
+                            <option type="fire wave" spellbook="standard" speed="5">Fire wave</option>
+
+                            <option type="air surge" spellbook="standard" speed="5">Air surge</option>
+                            <option type="water surge" spellbook="standard" speed="5">Water surge</option>
+                            <option type="earth surge" spellbook="standard" speed="5">Earth surge</option>
+                            <option type="fire surge" spellbook="standard" speed="5">Fire surge</option>
+
+                            <option type="smoke rush" spellbook="ancient" speed="5">Smoke rush</option>
+                            <option type="shadow rush" spellbook="ancient" speed="5">Shadow rush</option>
+                            <option type="blood rush" spellbook="ancient" speed="5">Blood rush</option>
+                            <option type="ice rush" spellbook="ancient" speed="5">Ice rush</option>
+
+                            <option type="smoke burst" spellbook="ancient" speed="5">Smoke burst</option>
+                            <option type="shadow burst" spellbook="ancient" speed="5">Shadow burst</option>
+                            <option type="blood burst" spellbook="ancient" speed="5">Blood burst</option>
+                            <option type="ice burst" spellbook="ancient" speed="5">Ice burst</option>
+
+                            <option type="smoke blitz" spellbook="ancient" speed="5">Smoke blitz</option>
+                            <option type="shadow blitz" spellbook="ancient" speed="5">Shadow blitz</option>
+                            <option type="blood blitz" spellbook="ancient" speed="5">Blood blitz</option>
+                            <option type="ice blitz" spellbook="ancient" speed="5">Ice blitz</option>
+
+                            <option type="smoke barrage" spellbook="ancient" speed="5">Smoke barrage</option>
+                            <option type="shadow barrage" spellbook="ancient" speed="5">Shadow barrage</option>
+                            <option type="blood barrage" spellbook="ancient" speed="5">Blood barrage</option>
+                            <option type="ice barrage" spellbook="ancient" speed="5">Ice barrage</option>
+
+
+                            <option type="crumble undead" spellbook="other" speed="5">Crumble undead</option>
+                            <option type="iban blast" spellbook="other" speed="5">Iban blast</option>
+                            <option type="god spell" spellbook="other" speed="5">God spell</option>
+                            <option type="god spell (charged)" spellbook="other" speed="5">God spell (charged)</option>
+                        </select>
+                        <label class="mdl-textfield__label" for="magicSpell">Magic spell</label>
+                    </div>
+
+                    <div class="mdl-cell--4-col mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                        <input class="mdl-textfield__input" type="text" id="attack" pattern="-?[0-9]*(\.[0-9]+)?">
+                        <label class="mdl-textfield__label" for="attack">Attack</label>
+                    </div>
+
+                    <div class="mdl-cell--4-col mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                        <input class="mdl-textfield__input" type="text" id="strength" pattern="-?[0-9]*(\.[0-9]+)?">
+                        <label class="mdl-textfield__label" for="strength">Strength</label>
+                    </div>
+
+                    <div class="mdl-cell--4-col mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                        <input class="mdl-textfield__input" type="text" id="defence" pattern="-?[0-9]*(\.[0-9]+)?">
+                        <label class="mdl-textfield__label" for="defence">Defence</label>
+                    </div>
+
+                    <div class="mdl-cell--4-col mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                        <input class="mdl-textfield__input" type="text" id="ranged" pattern="-?[0-9]*(\.[0-9]+)?">
+                        <label class="mdl-textfield__label" for="ranged">Ranged</label>
+                    </div>
+
+                    <div class="mdl-cell--4-col mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                        <input class="mdl-textfield__input" type="text" id="magic" pattern="-?[0-9]*(\.[0-9]+)?">
+                        <label class="mdl-textfield__label" for="magic">Magic</label>
+                    </div>
+
+                    <div class="mdl-cell--4-col mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                        <select class="mdl-textfield__input" id="prayer">
+                            <option>None</option>
+                            <option>5%</option>
+                            <option>10%</option>
+                            <option>15%</option>
+                            <option>Chivalry</option>
+                            <option>Piety</option>
+                            <option>Rigour</option>
+                            <option>Augury</option>
+                        </select>
+                        <label class="mdl-textfield__label" for="prayer">Prayer</label>
+                    </div>
+
+                    <center><div style="max-width: 30em; min-height: 30em; height: 30em">
+                    <div class="square">
+                        <div class="mdl-grid content" >
+
+                            <div class = "mdl-cell mdl-cell--5-col"></div>
+                            <div class = "mdl-cell mdl-cell--2-col equipment" name="headslot"><div><img src="" alt=""></div></div>
+                            <div class = "mdl-cell mdl-cell--5-col"></div>
+
+                            <div class = "mdl-cell mdl-cell--3-col"></div>
+                            <div class = "mdl-cell mdl-cell--2-col equipment" name="capeslot"><div><img src="" alt=""></div></div>
+                            <div class = "mdl-cell mdl-cell--2-col equipment" name="neckslot"><div><img src="" alt=""></div></div>
+                            <div class = "mdl-cell mdl-cell--2-col equipment" name="ammoslot"><div><img src="" alt=""></div></div>
+                            <div class = "mdl-cell mdl-cell--3-col"></div>
+
+
+                            <div class = "mdl-cell mdl-cell--2-col"></div>
+                            <div class = "mdl-cell mdl-cell--2-col equipment" name="weaponslot"><div><img src="" alt=""></div></div>
+                            <div class = "mdl-cell mdl-cell--1-col"></div>
+                            <div class = "mdl-cell mdl-cell--2-col equipment" name="bodyslot"><div><img src="" alt=""></div></div>
+                            <div class = "mdl-cell mdl-cell--1-col"></div>
+                            <div class = "mdl-cell mdl-cell--2-col equipment" name="shieldslot"><div><img src="" alt=""></div></div>
+                            <div class = "mdl-cell mdl-cell--2-col"></div>
+
+
+                            <div class = "mdl-cell mdl-cell--5-col"></div>
+                            <div class = "mdl-cell mdl-cell--2-col equipment" name="legsslot"><div><img src="" alt=""></div></div>
+                            <div class = "mdl-cell mdl-cell--5-col"></div>
+
+
+                            <div class = "mdl-cell mdl-cell--2-col"></div>
+                            <div class = "mdl-cell mdl-cell--2-col equipment" name="handslot"><div><img src="" alt=""></div></div>
+                            <div class = "mdl-cell mdl-cell--1-col"></div>
+                            <div class = "mdl-cell mdl-cell--2-col equipment" name="feetslot"><div><img src="" alt=""></div></div>
+                            <div class = "mdl-cell mdl-cell--1-col"></div>
+                            <div class = "mdl-cell mdl-cell--2-col equipment" name="ringslot"><div><img src="" alt=""></div></div>
+                            <div class = "mdl-cell mdl-cell--2-col"></div>
+
+
+                            <div class = "mdl-cell mdl-cell--12-col equipment"><div id="dpsResult"></div></div>
+                        </div>
+
+
+
+                    </div>
+                    </div></center>
+                    <div name="result" style="display: inline">
+
+                    </div>
+                </div>
+
+                <div class="mdl-cell mdl-cell--2-col">
+                    <div class="mdl-cell--12-col mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                        <select class="mdl-textfield__input" id="npcContainer">
+                        </select>
+                        <label class="mdl-textfield__label" for="prayer">NPC</label>
+                    </div>
+
+                    <div class="mdl-cell--6-col mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                        <input class="mdl-textfield__input" type="text" id="npcDefenceLevel" pattern="-?[0-9]*(\.[0-9]+)?">
+                        <label class="mdl-textfield__label" for="npcDefenceLevel">Defence level</label>
+                    </div>
+
+                    <div class="mdl-cell--6-col mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                        <input class="mdl-textfield__input" type="text" id="npcMagicLevel" pattern="-?[0-9]*(\.[0-9]+)?">
+                        <label class="mdl-textfield__label" for="npcMagicLevel">Magic level</label>
+                    </div>
+
+                    <div class="mdl-cell--6-col mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                        <input class="mdl-textfield__input" type="text" id="npcStab" pattern="-?[0-9]*(\.[0-9]+)?">
+                        <label class="mdl-textfield__label" for="npcStab">Stab defence</label>
+                    </div>
+
+                    <div class="mdl-cell--6-col mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                        <input class="mdl-textfield__input" type="text" id="npcSlash" pattern="-?[0-9]*(\.[0-9]+)?">
+                        <label class="mdl-textfield__label" for="npcSlash">Slash defence</label>
+                    </div>
+
+                    <div class="mdl-cell--6-col mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                        <input class="mdl-textfield__input" type="text" id="npcCrush" pattern="-?[0-9]*(\.[0-9]+)?">
+                        <label class="mdl-textfield__label" for="npcCrush">Crush defence</label>
+                    </div>
+
+                    <div class="mdl-cell--6-col mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                        <input class="mdl-textfield__input" type="text" id="npcMagic" pattern="-?[0-9]*(\.[0-9]+)?">
+                        <label class="mdl-textfield__label" for="npcMagic">Magic defence</label>
+                    </div>
+
+                    <div class="mdl-cell--6-col mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                        <input class="mdl-textfield__input" type="text" id="npcRanged" pattern="-?[0-9]*(\.[0-9]+)?">
+                        <label class="mdl-textfield__label" for="npcRanged">Ranged defence</label>
+                    </div>
+
+                    <div class="mdl-cell--6-col mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                        <input class="mdl-textfield__input" type="text" id="npcType">
+                        <label class="mdl-textfield__label" for="npcType">Type</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<script src="js/sql.js" type="application/javascript"></script>
+<script src="js/loader.js" type="application/javascript"></script>
+<script src="js/module/item.js" type="application/javascript"></script>
+<script src="js/module/sort.js" type="application/javascript"></script>
+<script src="js/module/dps.js" type="application/javascript"></script>
+</body>
+</html>

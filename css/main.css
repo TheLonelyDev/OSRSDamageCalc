@@ -1,0 +1,212 @@
+.equipment[name="headslot"]
+{
+    background-image: url('./../assets/head_slot.png');
+}
+
+.equipment[name="capeslot"]
+{
+    background-image: url('./../assets/cape_slot.png');
+}
+
+.equipment[name="neckslot"]
+{
+    background-image: url('./../assets/neck_slot.png');
+}
+
+.equipment[name="ammoslot"]
+{
+    background-image: url('./../assets/ammo_slot.png');
+}
+
+.equipment[name="weaponslot"]
+{
+    background-image: url('./../assets/weapon_slot.png');
+}
+
+.equipment[name="bodyslot"]
+{
+    background-image: url('./../assets/chest_slot.png');
+}
+
+.equipment[name="shieldslot"]
+{
+    background-image: url('./../assets/shield_slot.png');
+}
+
+.equipment[name="legsslot"]
+{
+    background-image: url('./../assets/legs_slot.png');
+}
+
+.equipment[name="handslot"]
+{
+    background-image: url('./../assets/gloves_slot.png');
+}
+
+.equipment[name="feetslot"]
+{
+    background-image: url('./../assets/boots_slot.png');
+}
+
+.equipment[name="ringslot"]
+{
+    background-image: url('./../assets/ring_slot.png');
+}
+
+.equipment[active]
+{
+    background-image: url('./../assets/blank_slot.png');
+}
+
+.equipment
+{
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-size: cover;
+}
+
+.equipment div
+{
+    margin-right: 6px;
+    margin-left: 6px;
+    width: 36px;
+    height: 36px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-size: cover;
+}
+
+.equipment div img, .stats tr td div img
+{
+    display: block;
+
+    /*width: 100%;
+    height: auto;*/
+
+    max-height: 100%;
+    max-width: 100%;
+}
+
+.stats tr td div
+{
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-size: cover;
+    margin: auto;
+}
+
+.stats
+{
+    width: 100%;
+}
+
+.stats tr
+{
+    width: 100%;
+}
+
+
+.stats tr td
+{
+    width: auto;
+
+}
+
+.stats:first-child td
+{
+    width: 36px;
+    max-width: 36px
+}
+
+.stats tr td h1
+{
+    margin: 0;
+    padding: 0;
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+.square {
+    width: 100%;
+    padding-top: 100%; /* 1:1 Aspect Ratio */
+    position: relative; /* If you want text inside of it */
+}
+
+.square:after {
+
+}
+
+.content {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+}
+
+.content div {
+
+}
+
+#content, .content-grid > .mdl-cell {
+    overflow: scroll;
+    overflow-x: hidden;
+    max-height: 100%;
+}
+
+.flex {
+    display: flex;
+}
+
+.mdl-layout__content, .content-grid {
+    max-height: calc(100%);
+    height: calc(100%);
+
+}
+.page-content{
+    max-height: calc(100% - 16px);
+    height: calc(100%);
+}
+#SortContainer, #FilterContainer
+{
+    pointer-events: none;
+    padding: 0;
+}
+
+#SortContainer li, #FilterContainer li, #pagination li
+{
+    pointer-events: all;
+    list-style-type: none;
+    display: inline;
+}
+
+#SortContainer li *, #FilterContainer li * {
+    pointer-events: none;
+}
+
+#SortContainer li span button, #FilterContainer li span button {
+    pointer-events: all;
+}
+
+#pagination
+{
+    text-align: center;
+    margin: auto;
+}
+#pagination li
+{
+    min-width: 20px;
+    user-select: none;
+}
+
+.content-grid > mdl-cell
+{
+
+}
